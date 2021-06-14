@@ -41,6 +41,7 @@ const Recipe = (props) => {
       })
     }
   }
+  console.log(ingredients);
 
   const handleFavorite = () => {
     let payload = {
@@ -55,7 +56,7 @@ const Recipe = (props) => {
       area: data.strArea,
       thumbnail: data.strMealThumb,
       tags: data.strTags,
-      instructions: data.strInstructions,
+      instruction: data.strInstructions,
       youtubeUrl: data.strYoutube,
       ingredients
     };
@@ -63,18 +64,9 @@ const Recipe = (props) => {
     axios.put(`${REACT_APP_SERVER_URL}/api/users/recipes`, payload)
     .then(response => {
       console.log(response.data);
+      alert(`${data.strMeal} added to favorites!`);
     }).catch(error => {
       console.log('------------ FAVORITE ERROR ------------')
-      console.log(error);
-    })
-  }
-
-  const fetchRecipes = () => {
-    axios.get(`${REACT_APP_SERVER_URL}/api/recipes`)
-    .then(response => {
-      console.log(response.data);
-    }).catch(error => {
-      console.log('------------ RETRIEVE ERROR ------------')
       console.log(error);
     })
   }
@@ -99,7 +91,6 @@ const Recipe = (props) => {
           <hr/>
           {userData ? <button onClick={handleFavorite} className="btn btn-secondary">Favorite</button> : <></>}
           <button onClick={props.history.goBack} className="btn btn-primary">Back</button>
-          <button onClick={fetchRecipes} className="btn btn-secondary">Fetch Data</button>
         </div>
       </div>
     </section>
