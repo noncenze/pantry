@@ -9,7 +9,7 @@ const Recipe = (props) => {
   const mealId = data.idMeal;
   const userData = props.location.user ? props.location.user : props.user;
   const [recipe, setRecipe] = useState(data);
-  console.log(userData);
+  console.log('USER INFORMATION: ', userData);
 
   useEffect(() => {
     axios.get(`${REACT_APP_SERVER_URL}/api/mealdb/id/${mealId}`)
@@ -25,10 +25,9 @@ const Recipe = (props) => {
 
   let video = '';
   if (recipe.strYoutube) {
-    video = <a href={recipe.strYoutube}>Instructional Video</a>
+    video = <a href={recipe.strYoutube}>Here</a>
   } else if (recipe.strYoutube === "" || [] || false) {
-    // video = <p>No video instructions</p>
-    video = 'No video instructions'
+    video = 'Not available'
   };
 
   let ingredients = [];
@@ -80,29 +79,11 @@ const Recipe = (props) => {
     })
   }
 
-  return (
-    // <div>
-    //   <h3>{recipe.strMeal}</h3>
-    //   <img src={recipe.strMealThumb} alt={recipe.strMeal} className="meals-center" style={{height: "500px", width: "500px"}}/>
-    //   <h5>Instructions</h5>
-    //   <p>{recipe.strInstructions}</p>
-    //   {video}
-    //   <hr/>
-    //   <h6>Ingredients Needed</h6>
-    //   <ul>
-    //     <li>{recipe.strIngredient1}</li>
-    //     <li>{recipe.strIngredient2}</li>
-    //     <li>{recipe.strIngredient3}</li>
-    //     <li>{recipe.strIngredient4}</li>
-    //     <li>{recipe.strIngredient5}</li>
-    //     <li>{recipe.strIngredient6}</li>
-    //     <li>{recipe.strIngredient7}</li>
-    //     <li>{recipe.strIngredient8}</li>
-    //     <li>{recipe.strIngredient9}</li>
-    //   </ul>
-    //   <button onClick={props.history.goBack} className="btn btn-primary">Back</button>
-    // </div>
+  const ingredientsList = ingredients.map((item, index) => {
+    return (<li key={index}>{item.name}: {item.measurement}</li>)
+  })
 
+  return (
     <section className='section meal-section'>
       <h2 className='section-title'>{recipe.strMeal}</h2>
       <div className='food'>
@@ -110,10 +91,13 @@ const Recipe = (props) => {
         <div className='food-info'>
           <p><span className='food-data'> Name:</span>{recipe.strMeal}</p>
           <p><span className='food-data'> Category:</span>{recipe.strCategory}</p>
-          <p><span className='food-data'> Info:</span>{recipe.strArea}</p>
+          <p><span className='food-data'> Area:</span>{recipe.strArea}</p>
           <p><span className='food-data'> Instructions:</span>{recipe.strInstructions}</p>
           <p><span className='food-data'> Video Instructions:</span>{video}</p>
-          <button onClick={handleFavorite} className="btn btn-secondary">Favorite</button>
+          <hr/>
+          <p><span className='food-data'> Ingredients:</span>{ingredientsList}</p>
+          <hr/>
+          {userData ? <button onClick={handleFavorite} className="btn btn-secondary">Favorite</button> : <></>}
           <button onClick={props.history.goBack} className="btn btn-primary">Back</button>
           <button onClick={fetchRecipes} className="btn btn-secondary">Fetch Data</button>
         </div>
